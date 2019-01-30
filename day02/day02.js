@@ -1,26 +1,37 @@
-const boxIds = [ "abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab", ];
+const readFile = require("../fileReader.js").readFile;
 
-const calculateChecksum = (ids) => {
-  const combinations = { two: 0, three: 0, };
+const calculateChecksum = async (filename) => {
+  const combinations = { two: 0, three: 0 };
 
-  ids.forEach((id) => {
-    console.log(id);
+  try {
+    let ids = await readFile(filename);
+    ids = ids.toString().split("\n");
 
-    const count = {};
+    // console.log(data);
 
-    for (let i = 0; i < id.length; i++) {
-      if (!count[id[i]]) count[id[i]] = 1;
-      else count[id[i]]++;
-    };
+    ids.forEach((id) => {
+      // console.log(id);
+      const count = {};
 
-    console.log(count);
+      for (let i = 0; i < id.length; i++) {
+        if (!count[id[i]]) count[id[i]] = 1;
+        else count[id[i]]++;
+      }
 
-    if (Object.values(count).includes(2)) combinations.two++;
-    if (Object.values(count).includes(3)) combinations.three++;
-  });
+      objValues = Object.values(count);
 
-  return combinations.two * combinations.three;
+      if (objValues.includes(2)) combinations.two++;
+      if (objValues.includes(3)) combinations.three++;
+    });
+
+    console.log(combinations.two * combinations.three);
+
+    return combinations.two * combinations.three;
+
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-console.log(calculateChecksum(boxIds));
+calculateChecksum("./day02.input");
 

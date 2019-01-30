@@ -1,20 +1,21 @@
-const test = "+1, +1, +1";
-const test1 = "+1, +1, -2";
-const test2 = "-1, -2, -3";
+const readFile = require("../fileReader.js").readFile;
 
-const calculateFrequency = (testCase) => {
-  let resultingFrequency = 0;
+const calculateFrequency = async (filename) => {
+  try { 
+    const data = await readFile(filename);
 
-  const frequencies = testCase.split(", ");
+    let frequencies = data.toString().split("\n");
+    console.log(frequencies)
 
-  frequencies.forEach(frequency => {
-    //  Could also use ParseInt(frequency, 10); This however is worse
-    //  performance wise then the method used below.
-    frequency = frequency * 1;
-    resultingFrequency += frequency;
-  });
+    const resultingFrequency = frequencies.reduce((acc, curr) => {
+      return acc + (curr * 1);
+    }, 0);
 
-  return resultingFrequency;
+    console.log(resultingFrequency);
+    return resultingFrequency;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-console.log(calculateFrequency(test2))
+calculateFrequency("./day01.input");
